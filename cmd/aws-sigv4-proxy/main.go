@@ -155,5 +155,5 @@ func roleSessionName() string {
 		suffix = strconv.FormatInt(now, 10)
 	}
 
-	return "aws-sigv4-proxy-" + suffix
+	return "aws-aoss-proxy-" + suffix
 }
