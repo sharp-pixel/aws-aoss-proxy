@@ -119,6 +119,7 @@ func main() {
 
 	http.HandleFunc("/", handler.GetInfo)
 	http.HandleFunc("/_nodes/stats", handler.GetNodesInfo)
+	http.HandleFunc("/_cluster/health", handler.GetHealthInfo)
 
 	log.Fatal(
 		http.ListenAndServe(*port, &handler.Handler{
