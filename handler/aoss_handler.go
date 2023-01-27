@@ -109,3 +109,50 @@ func GetNodesInfo(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+
+type Health struct {
+	ClusterName                 string  `json:"cluster_name"`
+	Status                      string  `json:"status"`
+	TimedOut                    bool    `json:"timed_out"`
+	NumberOfNodes               int     `json:"number_of_nodes"`
+	NumberOfDataNodes           int     `json:"number_of_data_nodes"`
+	ActivePrimaryShards         int     `json:"active_primary_shards"`
+	ActiveShards                int     `json:"active_shards"`
+	RelocatingShards            int     `json:"relocating_shards"`
+	InitializingShards          int     `json:"initializing_shards"`
+	UnassignedShards            int     `json:"unassigned_shards"`
+	DelayedUnassignedShards     int     `json:"delayed_unassigned_shards"`
+	NumberOfPendingTasks        int     `json:"number_of_pending_tasks"`
+	NumberOfInFlightFetch       int     `json:"number_of_in_flight_fetch"`
+	TaskMaxWaitingInQueueMillis int     `json:"task_max_waiting_in_queue_millis"`
+	ActiveShardsPercentAsNumber float64 `json:"active_shards_percent_as_number"`
+}
+
+func GetHealthInfo(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		health := Health{
+			ClusterName:                 "serverless",
+			Status:                      "green",
+			TimedOut:                    false,
+			NumberOfNodes:               1,
+			NumberOfDataNodes:           1,
+			ActivePrimaryShards:         1,
+			ActiveShards:                1,
+			RelocatingShards:            0,
+			InitializingShards:          0,
+			UnassignedShards:            0,
+			DelayedUnassignedShards:     0,
+			NumberOfPendingTasks:        0,
+			NumberOfInFlightFetch:       0,
+			TaskMaxWaitingInQueueMillis: 0,
+			ActiveShardsPercentAsNumber: 1.0,
+		}
+
+		w.WriteHeader(200)
+		w.Header().Set("Content-Type", "application/json")
+		err := json.NewEncoder(w).Encode(health)
+		if err != nil {
+			println("Could not encode info details")
+		}
+	}
+}
