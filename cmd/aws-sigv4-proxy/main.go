@@ -71,19 +71,19 @@ func main() {
 
 	sessionConfig.CredentialsChainVerboseErrors = aws.Bool(shouldLogSigning())
 
-	session, err := session.NewSession(&sessionConfig)
+	sess, err := session.NewSession(&sessionConfig)
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	if *regionOverride != "" {
-		session.Config.Region = regionOverride
+		sess.Config.Region = regionOverride
 	}
 
 	// For STS regional endpoint to be effective config's region must be set.
-	if *session.Config.Region == "" {
+	if *sess.Config.Region == "" {
 		defaultRegion := "us-east-1"
-		session.Config.Region = &defaultRegion
+		sess.Config.Region = &defaultRegion
 	}
 
 	if *disableSSLVerification {
@@ -93,16 +93,16 @@ func main() {
 
 	http.DefaultTransport.(*http.Transport).IdleConnTimeout = *idleConnTimeout
 
-	var credentials *credentials.Credentials
+	var creds *credentials.Credentials
 	if *roleArn != "" {
-		credentials = stscreds.NewCredentials(session, *roleArn, func(p *stscreds.AssumeRoleProvider) {
+		creds = stscreds.NewCredentials(sess, *roleArn, func(p *stscreds.AssumeRoleProvider) {
 			p.RoleSessionName = roleSessionName()
 		})
 	} else {
-		credentials = session.Config.Credentials
+		creds = sess.Config.Credentials
 	}
 
-	signer := v4.NewSigner(credentials, func(s *v4.Signer) {
+	signer := v4.NewSigner(creds, func(s *v4.Signer) {
 		if shouldLogSigning() {
 			s.Logger = awsLoggerAdapter{}
 			s.Debug = aws.LogDebugWithSigning
@@ -116,6 +116,8 @@ func main() {
 
 	log.WithFields(log.Fields{"StripHeaders": *strip}).Infof("Stripping headers %s", *strip)
 	log.WithFields(log.Fields{"port": *port}).Infof("Listening on %s", *port)
+
+	http.HandleFunc("/", handler.GetInfo)
 
 	log.Fatal(
 		http.ListenAndServe(*port, &handler.Handler{

@@ -52,8 +52,8 @@ func init() {
 		hostAps := fmt.Sprintf("aps.%s.amazonaws.com", region)
 		services[hostAps] = endpoints.ResolvedEndpoint{URL: fmt.Sprintf("https://%s", hostAps), SigningMethod: "v4", SigningRegion: region, SigningName: "aps", PartitionID: "aws"}
 
-		hostApsws := fmt.Sprintf("aps-workspaces.%s.amazonaws.com", region)
-		services[hostApsws] = endpoints.ResolvedEndpoint{URL: fmt.Sprintf("https://%s", hostApsws), SigningMethod: "v4", SigningRegion: region, SigningName: "aps", PartitionID: "aws"}
+		hostApsWs := fmt.Sprintf("aps-workspaces.%s.amazonaws.com", region)
+		services[hostApsWs] = endpoints.ResolvedEndpoint{URL: fmt.Sprintf("https://%s", hostApsWs), SigningMethod: "v4", SigningRegion: region, SigningName: "aps", PartitionID: "aws"}
 	}
 }
 
