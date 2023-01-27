@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"bytes"
 	"encoding/json"
 	log "github.com/sirupsen/logrus"
 	"net/http"
@@ -57,14 +56,13 @@ func GetInfo(w http.ResponseWriter, r *http.Request) {
 			println("Could not encode info details")
 		}
 
-		var prettyJSON bytes.Buffer
-		error := json.Indent(&prettyJSON, info, "", "\t")
+		b, error := json.MarshalIndent(info, "", "  ")
 		if error != nil {
 			log.Println("JSON parse error: ", error)
 			return
 		}
 
-		log.Println("CSP Violation:", string(prettyJSON.Bytes()))
+		log.Println(string(b))
 	}
 }
 
