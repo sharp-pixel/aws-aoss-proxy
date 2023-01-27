@@ -122,6 +122,7 @@ func main() {
 	router := mux.NewRouter()
 	router.HandleFunc("/", handler.GetInfo).Methods("GET")
 	router.HandleFunc("/_nodes/stats", handler.GetNodesInfo).Methods("GET")
+	router.HandleFunc("/_nodes/_all", handler.GetNodesInfo).Methods("GET")
 	router.HandleFunc("/_cluster/health", handler.GetHealthInfo).Methods("GET")
 	router.NotFoundHandler = &handler.Handler{
 		ProxyClient: &handler.ProxyClient{
