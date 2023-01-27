@@ -48,7 +48,6 @@ func GetInfo(w http.ResponseWriter, r *http.Request) {
 		TagLine:     "The OpenSearch Project: https://opensearch.org/",
 	}
 
-	w.WriteHeader(200)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err := json.NewEncoder(w).Encode(info)
 	if err != nil {
@@ -111,7 +110,6 @@ func GetNodesInfo(w http.ResponseWriter, r *http.Request) {
 		Nodes:       []NodeInfo{nodeInfo},
 	}
 
-	w.WriteHeader(200)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err := json.NewEncoder(w).Encode(nodesInfo)
 	if err != nil {
@@ -158,7 +156,6 @@ func GetHealthInfo(w http.ResponseWriter, r *http.Request) {
 		ActiveShardsPercentAsNumber: 1.0,
 	}
 
-	w.WriteHeader(200)
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err := json.NewEncoder(w).Encode(health)
 	if err != nil {
