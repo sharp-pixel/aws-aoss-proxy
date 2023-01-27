@@ -50,7 +50,7 @@ func GetInfo(w http.ResponseWriter, r *http.Request) {
 		}
 
 		w.WriteHeader(200)
-		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("content-type", "application/json")
 		err := json.NewEncoder(w).Encode(info)
 		if err != nil {
 			println("Could not encode info details")
