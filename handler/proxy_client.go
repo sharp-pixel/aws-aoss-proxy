@@ -18,7 +18,7 @@ package handler
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httputil"
 	"time"
@@ -48,7 +48,7 @@ func (p *ProxyClient) sign(req *http.Request, service *endpoints.ResolvedEndpoin
 	body := bytes.NewReader([]byte{})
 
 	if req.Body != nil {
-		b, err := ioutil.ReadAll(req.Body)
+		b, err := io.ReadAll(req.Body)
 		if err != nil {
 			return err
 		}
@@ -58,7 +58,7 @@ func (p *ProxyClient) sign(req *http.Request, service *endpoints.ResolvedEndpoin
 
 	// S3 service should not have any escaping applied.
 	// https://github.com/aws/aws-sdk-go/blob/main/aws/signer/v4/v4.go#L467-L470
-        if (service.SigningName == "s3") {
+	if service.SigningName == "s3" {
 		p.Signer.DisableURIPathEscaping = true
 
 		// Enable URI escaping for subsequent calls.
@@ -73,7 +73,7 @@ func (p *ProxyClient) sign(req *http.Request, service *endpoints.ResolvedEndpoin
 		_, err = p.Signer.Sign(req, body, service.SigningName, service.SigningRegion, time.Now())
 		break
 	case "s3":
-		_, err = p.Signer.Presign(req, body, service.SigningName, service.SigningRegion, time.Duration(time.Hour), time.Now())
+		_, err = p.Signer.Presign(req, body, service.SigningName, service.SigningRegion, time.Hour, time.Now())
 		break
 	default:
 		err = fmt.Errorf("unable to sign with specified signing method %s for service %s", service.SigningMethod, service.SigningName)
@@ -147,7 +147,7 @@ func (p *ProxyClient) Do(req *http.Request) (*http.Response, error) {
 
 	// Remove any headers specified
 	for _, header := range p.StripRequestHeaders {
-		log.WithField("StripHeader", string(header)).Debug("Stripping Header:")
+		log.WithField("StripHeader", header).Debug("Stripping Header:")
 		req.Header.Del(header)
 	}
 
@@ -168,7 +168,7 @@ func (p *ProxyClient) Do(req *http.Request) (*http.Response, error) {
 	}
 
 	if (p.LogFailedRequest || log.GetLevel() == log.DebugLevel) && resp.StatusCode >= 400 {
-		b, _ := ioutil.ReadAll(resp.Body)
+		b, _ := io.ReadAll(resp.Body)
 		log.WithField("request", fmt.Sprintf("%s %s", proxyReq.Method, proxyReq.URL)).
 			WithField("status_code", resp.StatusCode).
 			WithField("message", string(b)).
@@ -176,7 +176,7 @@ func (p *ProxyClient) Do(req *http.Request) (*http.Response, error) {
 
 		// Need to "reset" the response body because we consumed the stream above, otherwise caller will
 		// get empty body.
-		resp.Body = ioutil.NopCloser(bytes.NewBuffer(b))
+		resp.Body = io.NopCloser(bytes.NewBuffer(b))
 	}
 
 	return resp, nil
