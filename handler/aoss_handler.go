@@ -49,7 +49,7 @@ func GetInfo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(200)
-	w.Header().Set("content-type", "application/json")
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err := json.NewEncoder(w).Encode(info)
 	if err != nil {
 		println("Could not encode info details")
@@ -112,7 +112,7 @@ func GetNodesInfo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(200)
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err := json.NewEncoder(w).Encode(nodesInfo)
 	if err != nil {
 		println("Could not encode info details")
@@ -159,7 +159,7 @@ func GetHealthInfo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(200)
-	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	err := json.NewEncoder(w).Encode(health)
 	if err != nil {
 		println("Could not encode info details")
