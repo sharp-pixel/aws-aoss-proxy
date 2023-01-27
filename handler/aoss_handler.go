@@ -74,13 +74,8 @@ type Collector struct {
 	CollectionCount        string `json:"collection_count"`
 }
 
-type GcCollector struct {
-	Old   Collector `json:"old"`
-	Young Collector `json:"young"`
-}
-
 type JvmGc struct {
-	Collectors []GcCollector `json:"collectors"`
+	Collectors map[string]Collector `json:"collectors"`
 }
 
 type Jvm struct {
@@ -109,9 +104,28 @@ func GetNodesInfo(w http.ResponseWriter, r *http.Request) {
 		AvailableProcessors: "1",
 	}
 
+	oldCollector := Collector{
+		CollectionTimeInMillis: "0",
+		CollectionCount:        "0",
+	}
+
+	youngCollector := Collector{
+		CollectionTimeInMillis: "0",
+		CollectionCount:        "0",
+	}
+
+	collectors := make(map[string]Collector)
+	collectors["old"] = oldCollector
+	collectors["young"] = youngCollector
+
+	gc := JvmGc{
+		Collectors: collectors,
+	}
+
 	jvm := Jvm{
 		VmVendor: "Amazon",
 		Version:  "11.0",
+		Gc:       gc,
 	}
 
 	nodeInfo := NodeInfo{
