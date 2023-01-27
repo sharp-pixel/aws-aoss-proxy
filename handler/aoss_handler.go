@@ -81,8 +81,8 @@ type NodeInfo struct {
 }
 
 type NodesInfo struct {
-	ClusterName string     `json:"cluster_name"`
-	Nodes       []NodeInfo `json:"nodes"`
+	ClusterName string              `json:"cluster_name"`
+	Nodes       map[string]NodeInfo `json:"nodes"`
 }
 
 func GetNodesInfo(w http.ResponseWriter, r *http.Request) {
@@ -105,9 +105,12 @@ func GetNodesInfo(w http.ResponseWriter, r *http.Request) {
 		Jvm:  jvm,
 	}
 
+	nodes := make(map[string]NodeInfo)
+	nodes["abcdefgh"] = nodeInfo
+
 	nodesInfo := NodesInfo{
 		ClusterName: "serverless",
-		Nodes:       []NodeInfo{nodeInfo},
+		Nodes:       nodes,
 	}
 
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
