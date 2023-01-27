@@ -27,7 +27,9 @@ type Info struct {
 }
 
 func GetInfo(w http.ResponseWriter, r *http.Request) {
-	log.Info("Intercepted /")
+	if log.GetLevel() == log.DebugLevel {
+		log.Debug("Intercepted /")
+	}
 
 	version := Version{
 		Distribution:                     "aoss",
@@ -104,7 +106,9 @@ type NodesInfo struct {
 }
 
 func GetNodesInfo(w http.ResponseWriter, r *http.Request) {
-	log.Info("Intercepted _nodes/stats")
+	if log.GetLevel() == log.DebugLevel {
+		log.Debug("Intercepted _nodes/stats")
+	}
 
 	os := Os{
 		Name:                "Linux",
@@ -181,7 +185,9 @@ type Health struct {
 }
 
 func GetHealthInfo(w http.ResponseWriter, r *http.Request) {
-	log.Info("Intercepted _cluster/health")
+	if log.GetLevel() == log.DebugLevel {
+		log.Debug("Intercepted _cluster/health")
+	}
 
 	health := Health{
 		ClusterName:                 "serverless",
