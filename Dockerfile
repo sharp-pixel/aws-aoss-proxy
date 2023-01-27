@@ -1,4 +1,4 @@
-FROM golang:1.19.0-alpine AS build
+FROM golang:1.19.5-alpine AS build
 
 RUN apk --update add \
       ca-certificates \
@@ -17,4 +17,3 @@ COPY --from=build /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 COPY --from=build /aws-sigv4-proxy/aws-sigv4-proxy ./
 
 ENTRYPOINT [ "./aws-sigv4-proxy" ]
-
