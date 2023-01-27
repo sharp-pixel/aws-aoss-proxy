@@ -8,6 +8,7 @@ const (
 	A4bServiceID                          = "a4b"                          // A4b.
 	AcmServiceID                          = "acm"                          // Acm.
 	AcmPcaServiceID                       = "acm-pca"                      // AcmPca.
+	AossServiceID                         = "aoss"                         // Aoss.
 	ApiMediatailorServiceID               = "api.mediatailor"              // ApiMediatailor.
 	ApiPricingServiceID                   = "api.pricing"                  // ApiPricing.
 	ApiSagemakerServiceID                 = "api.sagemaker"                // ApiSagemaker.

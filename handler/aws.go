@@ -42,11 +42,17 @@ func init() {
 		host := fmt.Sprintf("execute-api.%s.amazonaws.com", region)
 		services[host] = endpoints.ResolvedEndpoint{URL: fmt.Sprintf("https://%s", host), SigningMethod: "v4", SigningRegion: region, SigningName: "execute-api", PartitionID: "aws"}
 	}
-	// Add elasticsearch endpoints
+	// Add OpenSearch endpoints
 	for region := range endpoints.AwsPartition().Regions() {
 		host := fmt.Sprintf("%s.es.amazonaws.com", region)
 		services[host] = endpoints.ResolvedEndpoint{URL: fmt.Sprintf("https://%s", host), SigningMethod: "v4", SigningRegion: region, SigningName: "es", PartitionID: "aws"}
 	}
+	// Add OpenSearch Serverless endpoints
+	for region := range endpoints.AwsPartition().Regions() {
+		host := fmt.Sprintf("%s.aoss.amazonaws.com", region)
+		services[host] = endpoints.ResolvedEndpoint{URL: fmt.Sprintf("https://%s", host), SigningMethod: "v4", SigningRegion: region, SigningName: "aoss", PartitionID: "aws"}
+	}
+
 	// Add managed prometheus + workspace endpoints
 	for region := range endpoints.AwsPartition().Regions() {
 		hostAps := fmt.Sprintf("aps.%s.amazonaws.com", region)
