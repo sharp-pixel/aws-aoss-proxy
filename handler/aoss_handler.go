@@ -2,6 +2,7 @@ package handler
 
 import (
 	"encoding/json"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -27,6 +28,8 @@ type Info struct {
 
 func GetInfo(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
+		log.Info("Intercepted /")
+
 		version := Version{
 			Distribution:                     "aoss",
 			Number:                           "2.3.0",
@@ -79,6 +82,8 @@ type NodesInfo struct {
 
 func GetNodesInfo(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
+		log.Info("Intercepted _nodes/stats")
+
 		os := Os{
 			Name:                "Linux",
 			Version:             "1.0.0",
@@ -130,6 +135,8 @@ type Health struct {
 
 func GetHealthInfo(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
+		log.Info("Intercepted _cluster/health")
+
 		health := Health{
 			ClusterName:                 "serverless",
 			Status:                      "green",
