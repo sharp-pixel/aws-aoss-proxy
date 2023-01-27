@@ -120,9 +120,9 @@ func main() {
 	log.WithFields(log.Fields{"port": *port}).Infof("Listening on %s", *port)
 
 	router := mux.NewRouter()
-	router.HandleFunc("/", handler.GetInfo)
-	router.HandleFunc("/_nodes/stats", handler.GetNodesInfo)
-	router.HandleFunc("/_cluster/health", handler.GetHealthInfo)
+	router.HandleFunc("/", handler.GetInfo).Methods("GET")
+	router.HandleFunc("/_nodes/stats", handler.GetNodesInfo).Methods("GET")
+	router.HandleFunc("/_cluster/health", handler.GetHealthInfo).Methods("GET")
 	router.NotFoundHandler = &handler.Handler{
 		ProxyClient: &handler.ProxyClient{
 			Signer:              signer,

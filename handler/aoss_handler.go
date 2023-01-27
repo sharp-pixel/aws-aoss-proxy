@@ -27,43 +27,41 @@ type Info struct {
 }
 
 func GetInfo(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		log.Info("Intercepted /")
+	log.Info("Intercepted /")
 
-		version := Version{
-			Distribution:                     "aoss",
-			Number:                           "2.3.0",
-			BuildType:                        "serverless",
-			BuildHash:                        "unknown",
-			BuildDate:                        "2023-01-21T00:00:00.000000Z",
-			BuildSnapshot:                    false,
-			LuceneVersion:                    "9.3.0",
-			MinimumWireCompatibilityVersion:  "7.10.0",
-			MinimumIndexCompatibilityVersion: "7.0.0",
-		}
-		info := Info{
-			Name:        "serverless",
-			ClusterName: "serverless",
-			ClusterUuid: "0",
-			Version:     version,
-			TagLine:     "The OpenSearch Project: https://opensearch.org/",
-		}
-
-		w.WriteHeader(200)
-		w.Header().Set("content-type", "application/json")
-		err := json.NewEncoder(w).Encode(info)
-		if err != nil {
-			println("Could not encode info details")
-		}
-
-		b, error := json.MarshalIndent(info, "", "  ")
-		if error != nil {
-			log.Println("JSON parse error: ", error)
-			return
-		}
-
-		log.Println(string(b))
+	version := Version{
+		Distribution:                     "aoss",
+		Number:                           "2.3.0",
+		BuildType:                        "serverless",
+		BuildHash:                        "unknown",
+		BuildDate:                        "2023-01-21T00:00:00.000000Z",
+		BuildSnapshot:                    false,
+		LuceneVersion:                    "9.3.0",
+		MinimumWireCompatibilityVersion:  "7.10.0",
+		MinimumIndexCompatibilityVersion: "7.0.0",
 	}
+	info := Info{
+		Name:        "serverless",
+		ClusterName: "serverless",
+		ClusterUuid: "0",
+		Version:     version,
+		TagLine:     "The OpenSearch Project: https://opensearch.org/",
+	}
+
+	w.WriteHeader(200)
+	w.Header().Set("content-type", "application/json")
+	err := json.NewEncoder(w).Encode(info)
+	if err != nil {
+		println("Could not encode info details")
+	}
+
+	b, error := json.MarshalIndent(info, "", "  ")
+	if error != nil {
+		log.Println("JSON parse error: ", error)
+		return
+	}
+
+	log.Println(string(b))
 }
 
 type Os struct {
@@ -89,37 +87,35 @@ type NodesInfo struct {
 }
 
 func GetNodesInfo(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		log.Info("Intercepted _nodes/stats")
+	log.Info("Intercepted _nodes/stats")
 
-		os := Os{
-			Name:                "Linux",
-			Version:             "1.0.0",
-			AvailableProcessors: "1",
-		}
+	os := Os{
+		Name:                "Linux",
+		Version:             "1.0.0",
+		AvailableProcessors: "1",
+	}
 
-		jvm := Jvm{
-			VmVendor: "Amazon",
-			Version:  "11.0",
-		}
+	jvm := Jvm{
+		VmVendor: "Amazon",
+		Version:  "11.0",
+	}
 
-		nodeInfo := NodeInfo{
-			Name: "node",
-			Os:   os,
-			Jvm:  jvm,
-		}
+	nodeInfo := NodeInfo{
+		Name: "node",
+		Os:   os,
+		Jvm:  jvm,
+	}
 
-		nodesInfo := NodesInfo{
-			ClusterName: "serverless",
-			Nodes:       []NodeInfo{nodeInfo},
-		}
+	nodesInfo := NodesInfo{
+		ClusterName: "serverless",
+		Nodes:       []NodeInfo{nodeInfo},
+	}
 
-		w.WriteHeader(200)
-		w.Header().Set("Content-Type", "application/json")
-		err := json.NewEncoder(w).Encode(nodesInfo)
-		if err != nil {
-			println("Could not encode info details")
-		}
+	w.WriteHeader(200)
+	w.Header().Set("Content-Type", "application/json")
+	err := json.NewEncoder(w).Encode(nodesInfo)
+	if err != nil {
+		println("Could not encode info details")
 	}
 }
 
@@ -142,32 +138,30 @@ type Health struct {
 }
 
 func GetHealthInfo(w http.ResponseWriter, r *http.Request) {
-	if r.Method == "GET" {
-		log.Info("Intercepted _cluster/health")
+	log.Info("Intercepted _cluster/health")
 
-		health := Health{
-			ClusterName:                 "serverless",
-			Status:                      "green",
-			TimedOut:                    false,
-			NumberOfNodes:               1,
-			NumberOfDataNodes:           1,
-			ActivePrimaryShards:         1,
-			ActiveShards:                1,
-			RelocatingShards:            0,
-			InitializingShards:          0,
-			UnassignedShards:            0,
-			DelayedUnassignedShards:     0,
-			NumberOfPendingTasks:        0,
-			NumberOfInFlightFetch:       0,
-			TaskMaxWaitingInQueueMillis: 0,
-			ActiveShardsPercentAsNumber: 1.0,
-		}
+	health := Health{
+		ClusterName:                 "serverless",
+		Status:                      "green",
+		TimedOut:                    false,
+		NumberOfNodes:               1,
+		NumberOfDataNodes:           1,
+		ActivePrimaryShards:         1,
+		ActiveShards:                1,
+		RelocatingShards:            0,
+		InitializingShards:          0,
+		UnassignedShards:            0,
+		DelayedUnassignedShards:     0,
+		NumberOfPendingTasks:        0,
+		NumberOfInFlightFetch:       0,
+		TaskMaxWaitingInQueueMillis: 0,
+		ActiveShardsPercentAsNumber: 1.0,
+	}
 
-		w.WriteHeader(200)
-		w.Header().Set("Content-Type", "application/json")
-		err := json.NewEncoder(w).Encode(health)
-		if err != nil {
-			println("Could not encode info details")
-		}
+	w.WriteHeader(200)
+	w.Header().Set("Content-Type", "application/json")
+	err := json.NewEncoder(w).Encode(health)
+	if err != nil {
+		println("Could not encode info details")
 	}
 }
