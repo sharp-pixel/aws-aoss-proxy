@@ -17,6 +17,8 @@ package handler
 
 import (
 	"bytes"
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"io"
 	"net/http"
@@ -65,6 +67,14 @@ func (p *ProxyClient) sign(req *http.Request, service *endpoints.ResolvedEndpoin
 		defer func() {
 			p.Signer.DisableURIPathEscaping = false
 		}()
+	}
+
+	if service.SigningName == "aoss" {
+		hash, err := hexEncodedSha256OfRequest(req)
+		req.Header.Set("X-Amz-Content-Sha256", hash)
+		if err != nil {
+			return err
+		}
 	}
 
 	var err error
@@ -180,4 +190,30 @@ func (p *ProxyClient) Do(req *http.Request) (*http.Response, error) {
 	}
 
 	return resp, nil
+}
+
+const (
+	emptyStringSHA256 = `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`
+)
+
+func hexEncodedSha256OfRequest(r *http.Request) (string, error) {
+	if r.Body == nil {
+		return emptyStringSHA256, nil
+	}
+
+	hasher := sha256.New()
+	reqBodyBytes, err := io.ReadAll(r.Body)
+	if err != nil {
+		return "", err
+	}
+
+	if err := r.Body.Close(); err != nil {
+		return "", err
+	}
+	r.Body = io.NopCloser(bytes.NewBuffer(reqBodyBytes))
+
+	hasher.Write(reqBodyBytes)
+	digest := hasher.Sum(nil)
+
+	return hex.EncodeToString(digest), nil
 }

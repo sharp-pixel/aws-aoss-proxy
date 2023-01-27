@@ -18,7 +18,7 @@ package handler
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -72,7 +72,7 @@ func TestHandler_ServeHTTP(t *testing.T) {
 						Header: http.Header{
 							"test": []string{"header"},
 						},
-						Body: ioutil.NopCloser(bytes.NewBuffer([]byte(`proxy call successful`))),
+						Body: io.NopCloser(bytes.NewBuffer([]byte(`proxy call successful`))),
 					},
 				},
 			},
@@ -94,7 +94,7 @@ func TestHandler_ServeHTTP(t *testing.T) {
 			tt.handler.ServeHTTP(r, tt.request)
 
 			response := r.Result()
-			responseBody, _ := ioutil.ReadAll(response.Body)
+			responseBody, _ := io.ReadAll(response.Body)
 
 			assert.Equal(t, tt.want.statusCode, response.StatusCode)
 			assert.Equal(t, tt.want.header, response.Header)
