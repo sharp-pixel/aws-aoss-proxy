@@ -54,3 +54,58 @@ func GetInfo(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+
+type Os struct {
+	Name                string `json:"name"`
+	Version             string `json:"version"`
+	AvailableProcessors string `json:"available_processors"`
+}
+
+type Jvm struct {
+	VmVendor string `json:"vm_vendor"`
+	Version  string `json:"version"`
+}
+
+type NodeInfo struct {
+	Name string `json:"name"`
+	Os   Os     `json:"os"`
+	Jvm  Jvm    `json:"jvm"`
+}
+
+type NodesInfo struct {
+	ClusterName string     `json:"cluster_name"`
+	Nodes       []NodeInfo `json:"nodes"`
+}
+
+func GetNodesInfo(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		os := Os{
+			Name:                "Linux",
+			Version:             "1.0.0",
+			AvailableProcessors: "1",
+		}
+
+		jvm := Jvm{
+			VmVendor: "Amazon",
+			Version:  "11.0",
+		}
+
+		nodeInfo := NodeInfo{
+			Name: "node",
+			Os:   os,
+			Jvm:  jvm,
+		}
+
+		nodesInfo := NodesInfo{
+			ClusterName: "serverless",
+			Nodes:       []NodeInfo{nodeInfo},
+		}
+
+		w.WriteHeader(200)
+		w.Header().Set("Content-Type", "application/json")
+		err := json.NewEncoder(w).Encode(nodesInfo)
+		if err != nil {
+			println("Could not encode info details")
+		}
+	}
+}

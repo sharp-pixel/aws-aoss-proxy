@@ -118,6 +118,7 @@ func main() {
 	log.WithFields(log.Fields{"port": *port}).Infof("Listening on %s", *port)
 
 	http.HandleFunc("/", handler.GetInfo)
+	http.HandleFunc("/_nodes/stats", handler.GetNodesInfo)
 
 	log.Fatal(
 		http.ListenAndServe(*port, &handler.Handler{
