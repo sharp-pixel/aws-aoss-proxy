@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"bytes"
 	"encoding/json"
 	log "github.com/sirupsen/logrus"
 	"net/http"
@@ -35,7 +36,7 @@ func GetInfo(w http.ResponseWriter, r *http.Request) {
 			Number:                           "2.3.0",
 			BuildType:                        "serverless",
 			BuildHash:                        "unknown",
-			BuildDate:                        "2023-",
+			BuildDate:                        "2023-01-21T00:00:00Z",
 			BuildSnapshot:                    false,
 			LuceneVersion:                    "8.10.1",
 			MinimumWireCompatibilityVersion:  "6.8.0",
@@ -55,6 +56,15 @@ func GetInfo(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			println("Could not encode info details")
 		}
+
+		var prettyJSON bytes.Buffer
+		error := json.Indent(&prettyJSON, info, "", "\t")
+		if error != nil {
+			log.Println("JSON parse error: ", error)
+			return
+		}
+
+		log.Println("CSP Violation:", string(prettyJSON.Bytes()))
 	}
 }
 
