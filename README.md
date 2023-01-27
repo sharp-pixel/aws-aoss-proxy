@@ -1,14 +1,13 @@
-# AWS SigV4 Proxy
+# AWS AOSS Proxy
 
-The AWS SigV4 Proxy will sign incoming HTTP requests and forward them to the host specified in the `Host` header.
+The AWS AOSS Proxy will sign incoming HTTP requests and forward them to the host specified in the `Host` header.
 
-You can strip out arbirtary headers from the incoming request by using the -s option.
+You can strip out arbitrary headers from the incoming request by using the -s option.
 
 ## Getting Started
 
 Build and run the Proxy
 
-```go
 The proxy uses the default AWS SDK for Go credential search path:
 
 * Environment variables.
@@ -17,6 +16,7 @@ The proxy uses the default AWS SDK for Go credential search path:
 
 More information can be found in the [developer guide](https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html)
 
+```bash
 docker build -t aws-sigv4-proxy .
 
 # Env vars
@@ -55,37 +55,10 @@ When running the Proxy, the following flags can be used (none are required) :
 
 ## Examples
 
-S3
-
-```
-# us-east-1
-curl -s -H 'host: s3.amazonaws.com' http://localhost:8080/<BUCKET_NAME>
-
-# other region
-curl -s -H 'host: s3.<BUCKET_REGION>.amazonaws.com' http://localhost:8080/<BUCKET_NAME>
-```
-
-SQS
+Amazon OpenSearch Service (Serverless)
 
 ```sh
-curl -s -H 'host: sqs.<AWS_REGION>.amazonaws.com' 'http://localhost:8080/<AWS_ACCOUNT_ID>/<QUEUE_NAME>?Action=SendMessage&MessageBody=example'
-```
-
-API Gateway
-
-```sh
-curl -H 'host: <REST_API_ID>.execute-api.<AWS_REGION>.amazonaws.com' http://localhost:8080/<STAGE>/<PATH>
-```
-
-Running the service and stripping out sigv2 authorization headers
-
-```sh
-docker run --rm -ti \
-  -v ~/.aws:/root/.aws \
-  -p 8080:8080 \
-  -e 'AWS_SDK_LOAD_CONFIG=true' \
-  -e 'AWS_PROFILE=<SOME PROFILE>' \
-  aws-sigv4-proxy -v -s Authorization
+curl -H 'host: <REST_API_ID>.aoss.<AWS_REGION>.amazonaws.com' http://localhost:9200/<PATH>
 ```
 
 Running the service with Assume Role to use temporary credentials
@@ -96,7 +69,7 @@ docker run --rm -ti \
   -p 8080:8080 \
   -e 'AWS_SDK_LOAD_CONFIG=true' \
   -e 'AWS_PROFILE=<SOME PROFILE>' \
-  aws-sigv4-proxy -v --role-arn <ARN OF ROLE TO ASSUME>
+  aws-aoss-proxy -v --role-arn <ARN OF ROLE TO ASSUME>
 ```
 
 Include service name & region overrides when you notice errors like `unable to determine service from host` for API gateway, for example.
@@ -107,7 +80,7 @@ docker run --rm -ti \
   -p 8080:8080 \
   -e 'AWS_SDK_LOAD_CONFIG=true' \
   -e 'AWS_PROFILE=<SOME PROFILE>' \
-  aws-sigv4-proxy -v --name execute-api --region us-east-1
+  aws-aoss-proxy -v --name execute-api --region us-east-1
 ```
 
 ## Reference

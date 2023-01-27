@@ -70,6 +70,8 @@ func (p *ProxyClient) sign(req *http.Request, service *endpoints.ResolvedEndpoin
 	}
 
 	if service.SigningName == "aoss" {
+		// Pre-compute the SHA-256 hash of the body
+
 		hash, err := hexEncodedSha256OfRequest(req)
 		req.Header.Set("X-Amz-Content-Sha256", hash)
 		if err != nil {
