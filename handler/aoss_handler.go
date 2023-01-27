@@ -35,11 +35,11 @@ func GetInfo(w http.ResponseWriter, r *http.Request) {
 			Number:                           "2.3.0",
 			BuildType:                        "serverless",
 			BuildHash:                        "unknown",
-			BuildDate:                        "2023-01-21T00:00:00Z",
+			BuildDate:                        "2023-01-21T00:00:00.000000Z",
 			BuildSnapshot:                    false,
-			LuceneVersion:                    "8.10.1",
-			MinimumWireCompatibilityVersion:  "6.8.0",
-			MinimumIndexCompatibilityVersion: "6.0.0-beta1",
+			LuceneVersion:                    "9.3.0",
+			MinimumWireCompatibilityVersion:  "7.10.0",
+			MinimumIndexCompatibilityVersion: "7.0.0",
 		}
 		info := Info{
 			Name:        "serverless",
