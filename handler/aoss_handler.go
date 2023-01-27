@@ -54,13 +54,13 @@ func GetInfo(w http.ResponseWriter, r *http.Request) {
 		println("Could not encode info details")
 	}
 
-	b, error := json.MarshalIndent(info, "", "  ")
-	if error != nil {
-		log.Println("JSON parse error: ", error)
-		return
-	}
-
-	log.Println(string(b))
+	//b, error := json.MarshalIndent(info, "", "  ")
+	//if error != nil {
+	//	log.Println("JSON parse error: ", error)
+	//	return
+	//}
+	//
+	//log.Println(string(b))
 }
 
 type Os struct {
@@ -69,9 +69,24 @@ type Os struct {
 	AvailableProcessors string `json:"available_processors"`
 }
 
+type Collector struct {
+	CollectionTimeInMillis string `json:"collection_time_in_millis"`
+	CollectionCount        string `json:"collection_count"`
+}
+
+type GcCollector struct {
+	Old   Collector `json:"old"`
+	Young Collector `json:"young"`
+}
+
+type JvmGc struct {
+	Collectors []GcCollector `json:"collectors"`
+}
+
 type Jvm struct {
 	VmVendor string `json:"vm_vendor"`
 	Version  string `json:"version"`
+	Gc       JvmGc  `json:"gc"`
 }
 
 type NodeInfo struct {
