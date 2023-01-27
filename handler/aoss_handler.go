@@ -78,10 +78,18 @@ type JvmGc struct {
 	Collectors map[string]Collector `json:"collectors"`
 }
 
+type Pool struct {
+}
+
+type JvmMem struct {
+	Pools map[string]Pool `json:"pools"`
+}
+
 type Jvm struct {
 	VmVendor string `json:"vm_vendor"`
 	Version  string `json:"version"`
 	Gc       JvmGc  `json:"gc"`
+	Mem      JvmMem `json:"mem"`
 }
 
 type NodeInfo struct {
@@ -122,10 +130,15 @@ func GetNodesInfo(w http.ResponseWriter, r *http.Request) {
 		Collectors: collectors,
 	}
 
+	mem := JvmMem{
+		Pools: make(map[string]Pool),
+	}
+
 	jvm := Jvm{
 		VmVendor: "Amazon",
 		Version:  "11.0",
 		Gc:       gc,
+		Mem:      mem,
 	}
 
 	nodeInfo := NodeInfo{
