@@ -70,8 +70,8 @@ type Os struct {
 }
 
 type Collector struct {
-	CollectionTimeInMillis string `json:"collection_time_in_millis"`
-	CollectionCount        string `json:"collection_count"`
+	CollectionTimeInMillis int64 `json:"collection_time_in_millis"`
+	CollectionCount        int64 `json:"collection_count"`
 }
 
 type JvmGc struct {
@@ -113,13 +113,13 @@ func GetNodesInfo(w http.ResponseWriter, r *http.Request) {
 	}
 
 	oldCollector := Collector{
-		CollectionTimeInMillis: "0",
-		CollectionCount:        "0",
+		CollectionTimeInMillis: 0,
+		CollectionCount:        0,
 	}
 
 	youngCollector := Collector{
-		CollectionTimeInMillis: "0",
-		CollectionCount:        "0",
+		CollectionTimeInMillis: 0,
+		CollectionCount:        0,
 	}
 
 	collectors := make(map[string]Collector)
