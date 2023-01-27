@@ -32,6 +32,8 @@ import (
 	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/alecthomas/kingpin.v2"
+
+	"github.com/gorilla/mux"
 )
 
 var (
@@ -117,22 +119,24 @@ func main() {
 	log.WithFields(log.Fields{"StripHeaders": *strip}).Infof("Stripping headers %s", *strip)
 	log.WithFields(log.Fields{"port": *port}).Infof("Listening on %s", *port)
 
-	http.HandleFunc("/", handler.GetInfo)
-	http.HandleFunc("/_nodes/stats", handler.GetNodesInfo)
-	http.HandleFunc("/_cluster/health", handler.GetHealthInfo)
+	router := mux.NewRouter()
+	router.HandleFunc("/", handler.GetInfo)
+	router.HandleFunc("/_nodes/stats", handler.GetNodesInfo)
+	router.HandleFunc("/_cluster/health", handler.GetHealthInfo)
+	router.NotFoundHandler = &handler.Handler{
+		ProxyClient: &handler.ProxyClient{
+			Signer:              signer,
+			Client:              client,
+			StripRequestHeaders: *strip,
+			SigningNameOverride: *signingNameOverride,
+			HostOverride:        *hostOverride,
+			RegionOverride:      *regionOverride,
+			LogFailedRequest:    *logFailedResponse,
+		},
+	}
 
 	log.Fatal(
-		http.ListenAndServe(*port, &handler.Handler{
-			ProxyClient: &handler.ProxyClient{
-				Signer:              signer,
-				Client:              client,
-				StripRequestHeaders: *strip,
-				SigningNameOverride: *signingNameOverride,
-				HostOverride:        *hostOverride,
-				RegionOverride:      *regionOverride,
-				LogFailedRequest:    *logFailedResponse,
-			},
-		}),
+		http.ListenAndServe(*port, router),
 	)
 }
 
