@@ -17,7 +17,6 @@ package handler
 
 import (
 	"bytes"
-	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
 	"io"
@@ -27,6 +26,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws/endpoints"
 	v4 "github.com/aws/aws-sdk-go/aws/signer/v4"
+	"github.com/minio/sha256-simd"
 	log "github.com/sirupsen/logrus"
 )
 
