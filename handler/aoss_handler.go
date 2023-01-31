@@ -213,3 +213,37 @@ func GetHealthInfo(w http.ResponseWriter, r *http.Request) {
 		println("Could not encode info details")
 	}
 }
+
+type Shards struct {
+	Total      int `json:"total"`
+	Successful int `json:"successful"`
+	Failed     int `json:"failed"`
+}
+
+type ShardsResults struct {
+	Shards Shards `json:"_shards"`
+}
+
+func RefreshAll(w http.ResponseWriter, r *http.Request) {
+
+	shards := Shards{Total: 1, Successful: 1, Failed: 0}
+	result := ShardsResults{Shards: shards}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	err := json.NewEncoder(w).Encode(result)
+	if err != nil {
+		println("Could not encode info details")
+	}
+}
+
+func ForceMerge(w http.ResponseWriter, r *http.Request) {
+
+	shards := Shards{Total: 1, Successful: 1, Failed: 0}
+	result := ShardsResults{Shards: shards}
+
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	err := json.NewEncoder(w).Encode(result)
+	if err != nil {
+		println("Could not encode info details")
+	}
+}

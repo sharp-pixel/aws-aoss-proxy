@@ -126,6 +126,10 @@ func main() {
 	router.HandleFunc("/_nodes/stats/_all", handler.GetNodesInfo).Methods("GET")
 	router.HandleFunc("/_nodes/_all", handler.GetNodesInfo).Methods("GET")
 	router.HandleFunc("/_cluster/health", handler.GetHealthInfo).Methods("GET")
+	router.HandleFunc("/_cluster/health/{index}", handler.GetHealthInfo).Methods("GET")
+	router.HandleFunc("/{index}/_refresh", handler.RefreshAll).Methods("POST")
+	router.HandleFunc("/{index}/_forcemerge", handler.ForceMerge).Methods("POST")
+
 	router.NotFoundHandler = &handler.Handler{
 		ProxyClient: &handler.ProxyClient{
 			Signer:              signer,
