@@ -181,7 +181,9 @@ func (p *ProxyClient) Do(req *http.Request) (*http.Response, error) {
 
 	if (p.LogFailedRequest || log.GetLevel() == log.DebugLevel) && resp.StatusCode >= 400 {
 		b, _ := io.ReadAll(resp.Body)
+		rb, _ := io.ReadAll(proxyReq.Body)
 		log.WithField("request", fmt.Sprintf("%s %s", proxyReq.Method, proxyReq.URL)).
+			WithField("request_body", string(rb)).
 			WithField("status_code", resp.StatusCode).
 			WithField("message", string(b)).
 			Error("error proxying request")
