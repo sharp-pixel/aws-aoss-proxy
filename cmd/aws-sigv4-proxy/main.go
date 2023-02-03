@@ -124,6 +124,7 @@ func main() {
 	router.HandleFunc("/_stats/{metrics}", handler.GetNodesInfo).Methods("GET")
 	router.HandleFunc("/_nodes/stats", handler.GetNodesInfo).Methods("GET")
 	router.HandleFunc("/_nodes/stats/{metrics}", handler.GetNodesInfo).Methods("GET")
+	router.HandleFunc("/_all/_stats/_all", handler.GetIndexStats).Methods("GET") // not sure why this is not handled by the parameterized one.
 	router.HandleFunc("/{index}/_stats/{metrics}", handler.GetIndexStats).Methods("GET")
 	router.HandleFunc("/_nodes/{node_id}", handler.GetNodesInfo).Methods("GET")
 	router.HandleFunc("/_cluster/health", handler.GetHealthInfo).Methods("GET")
