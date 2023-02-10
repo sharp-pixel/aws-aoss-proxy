@@ -37,17 +37,17 @@ import (
 )
 
 var (
-	debug                  = kingpin.Flag("verbose", "Enable additional logging, implies all the log-* options").Short('v').Bool()
-	logFailedResponse      = kingpin.Flag("log-failed-requests", "Log 4xx and 5xx response body").Bool()
-	logSinging             = kingpin.Flag("log-signing-process", "Log sigv4 signing process").Bool()
-	port                   = kingpin.Flag("port", "Port to serve http on").Default(":8080").String()
-	strip                  = kingpin.Flag("strip", "Headers to strip from incoming request").Short('s').Strings()
-	roleArn                = kingpin.Flag("role-arn", "Amazon Resource Name (ARN) of the role to assume").String()
-	signingNameOverride    = kingpin.Flag("name", "AWS Service to sign for").String()
-	hostOverride           = kingpin.Flag("host", "Host to proxy to").String()
-	regionOverride         = kingpin.Flag("region", "AWS region to sign for").String()
-	disableSSLVerification = kingpin.Flag("no-verify-ssl", "Disable peer SSL certificate validation").Bool()
-	idleConnTimeout        = kingpin.Flag("transport.idle-conn-timeout", "Idle timeout to the upstream service").Default("40s").Duration()
+	debug                  = kingpin.Flag("verbose", "Enable additional logging, implies all the log-* options").Short('v').Envar("DEBUG").Bool()
+	logFailedResponse      = kingpin.Flag("log-failed-requests", "Log 4xx and 5xx response body").Envar("LOG_FAILED_RESPONSE").Bool()
+	logSinging             = kingpin.Flag("log-signing-process", "Log sigv4 signing process").Envar("LOG_SIGNING").Bool()
+	port                   = kingpin.Flag("port", "Port to serve http on").Default(":8080").Envar("PORT").String()
+	strip                  = kingpin.Flag("strip", "Headers to strip from incoming request").Short('s').Envar("STRIP").Strings()
+	roleArn                = kingpin.Flag("role-arn", "Amazon Resource Name (ARN) of the role to assume").Envar("ROLE_ARN").String()
+	signingNameOverride    = kingpin.Flag("name", "AWS Service to sign for").Envar("NAME").String()
+	hostOverride           = kingpin.Flag("host", "Host to proxy to").Envar("HOST").String()
+	regionOverride         = kingpin.Flag("region", "AWS region to sign for").Envar("REGION").String()
+	disableSSLVerification = kingpin.Flag("no-verify-ssl", "Disable peer SSL certificate validation").Envar("NO_VERIFY_SSL").Bool()
+	idleConnTimeout        = kingpin.Flag("transport.idle-conn-timeout", "Idle timeout to the upstream service").Envar("TRANSPORT_IDLE_CONN_TIMEOUT").Default("40s").Duration()
 )
 
 type awsLoggerAdapter struct {
